@@ -207,211 +207,69 @@ int main() {
 
     __builtin_enable_interrupts();
 
-    /*
-    // set up USER pin as input
-     ANSELBbits.ANSB13 = 0; // 0 for digital, 1 for analog
-     TRISBbits.TRISB13 = 1; // 1 for input, 0 for output
-
-    // set up LED1 pin as a digital output
-     TRISBbits.TRISB7 = 0;
-     LATBbits.LATB7 = 1;
-
-
-    // set up LED2 as OC1 using Timer2 at 1kHz
-     RPB15Rbits.RPB15R = 0b0101;
-          ANSELBbits.ANSB15 = 0;
-
-
-        PR2 = 39999;	//40mhz/PR2 equals frequency
-        TMR2 = 0;
-    	T2CONbits.TCKPS = 0;  //prescaler equals 256 at 0b111 or 1 at 0b000
-    	T2CONbits.TGATE = 0;
-    	T2CONbits.TCS = 0;
-
-        OC1CONbits.OCTSEL = 0; //set to timer 2
-        OC1CONbits.OCM = 0b110;  // PWM mode without fault pin; other OC1CON bits are defaults
-        OC1RS = 20000;             // duty cycle = OC1RS/(PR2+1) = 25%
-        OC1R = 20000;              // initialize before turning OC1 on; then it is read-only
-        T2CONbits.ON = 1;        // turn on Timer2
-        OC1CONbits.ON = 1;       // turn on OC1
-
-
-    // set up A0 as AN0
-    ANSELAbits.ANSA0 = 1;
-    AD1CON3bits.ADCS = 3;
-    AD1CHSbits.CH0SA = 0;
-    AD1CON1bits.ADON = 1;
-
-   LATBbits.LATB15 = 1;
-*/
-   // enable the i2c
-   
-   //i2c_master_setup();
+  
 
  
      
     display_init();
-       TRISBbits.TRISB7 = 0;
-     LATBbits.LATB7 = 1;
-   // code for setting up display
-   //display_clear(); //clear the display
-//   int row, col;
-//   while (1){
-//   for (col=0; col<WIDTH; ++col){
-//       row = col%HEIGHT;
-//       display_pixel_set(row,col,1); // set the pixel at the given row and column
-//       display_draw();
-//   }
-//   }
-   //display_draw();
+       
 
-   //display_clear();
 
      int colstart=28;
      int rowstart=32;
      int coltracker=colstart;
      int rowtracker=rowstart;
-     char message[0];
-     sprintf(message,"H");
+     char message[10];
+     sprintf(message,"Hello World 1337!");
      int length=strlen(message);
    int i;
    int j;
-
+   int k=0;
+   for (i=0; i<11; ++i){
    for (j=0; j<5; j++){
    //for (i=coltracker; i<coltracker+5; ++i){
-       
-       if ((ASCII[message[0]-0x20][j] & 0b00000001)==0b00000001){
+   //    if ((message[i])==0){
+   //        coltracker=colstart;
+   //        rowtracker=rowtracker+9;
+   //        TRISBbits.TRISB7 = 0;
+   //  LATBbits.LATB7 = 1;
+       }
+       if ((ASCII[message[i]-0x20][j] & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+7,1);
        }
-       if ((((ASCII[message[0]-0x20][j])>>1) & 0b00000001)==0b00000001){
+       if ((((ASCII[message[i]-0x20][j])>>1) & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+6,1);
        }
-       if ((((ASCII[message[0]-0x20][j])>>2) & 0b00000001)==0b00000001){
+       if ((((ASCII[message[i]-0x20][j])>>2) & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+5,1);
        }
-       if ((((ASCII[message[0]-0x20][j])>>3) & 0b00000001)==0b00000001){
+       if ((((ASCII[message[i]-0x20][j])>>3) & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+4,1);
        }
-       if ((((ASCII[message[0]-0x20][j])>>4) & 0b00000001)==0b00000001){
+       if ((((ASCII[message[i]-0x20][j])>>4) & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+3,1);
        }
-       if ((((ASCII[message[0]-0x20][j])>>5) & 0b00000001)==0b00000001){
+       if ((((ASCII[message[i]-0x20][j])>>5) & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+2,1);
        }
-       if ((((ASCII[message[0]-0x20][j])>>6) & 0b00000001)==0b00000001){
+       if ((((ASCII[message[i]-0x20][j])>>6) & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+1,1);
        }
-       if ((((ASCII[message[0]-0x20][j])>>7) & 0b00000001)==0b00000001){
+       if ((((ASCII[message[i]-0x20][j])>>7) & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker,1);
        }
        coltracker=coltracker+1;
       // }
    }
-
-
-
-   if ((ASCII[message[0]-0x20][0] & 0b00000001)==0b00000001){
-           display_pixel_set(40,50+7,1);
-       }
-       if ((((ASCII[message[0]-0x20][0])>>1) & 0b00000001)==0b00000001){
-           display_pixel_set(40,50+6,1);
-       }
-       if ((((ASCII[message[0]-0x20][0])>>2) & 0b00000001)==0b00000001){
-           display_pixel_set(40,50+5,1);
-       }
-       if ((((ASCII[message[0]-0x20][0])>>3) & 0b00000001)==0b00000001){
-           display_pixel_set(40,50+4,1);
-       }
-       if ((((ASCII[message[0]-0x20][0])>>4) & 0b00000001)==0b00000001){
-           display_pixel_set(40,50+3,1);
-       }
-       if ((((ASCII[message[0]-0x20][0])>>5) & 0b00000001)==0b00000001){
-           display_pixel_set(40,50+2,1);
-       }
-       if ((((ASCII[message[0]-0x20][0])>>6) & 0b00000001)==0b00000001){
-           display_pixel_set(40,50+1,1);
-       }
-       if ((((ASCII[message[0]-0x20][0])>>7) & 0b00000001)==0b00000001){
-           display_pixel_set(40,50,1);
-       }
    
 
-   if ((ASCII[message[0]-0x20][1] & 0b00000001)==0b00000001){
-           display_pixel_set(41,50+7,1);
-       }
-       if ((((ASCII[message[0]-0x20][1])>>1) & 0b00000001)==0b00000001){
-           display_pixel_set(41,50+6,1);
-       }
-       if ((((ASCII[message[0]-0x20][1])>>2) & 0b00000001)==0b00000001){
-           display_pixel_set(41,50+5,1);
-       }
-       if ((((ASCII[message[0]-0x20][1])>>3) & 0b00000001)==0b00000001){
-           display_pixel_set(41,50+4,1);
-       }
-       if ((((ASCII[message[0]-0x20][1])>>4) & 0b00000001)==0b00000001){
-           display_pixel_set(41,50+3,1);
-       }
-       if ((((ASCII[message[0]-0x20][1])>>5) & 0b00000001)==0b00000001){
-           display_pixel_set(41,50+2,1);
-       }
-       if ((((ASCII[message[0]-0x20][1])>>6) & 0b00000001)==0b00000001){
-           display_pixel_set(41,50+1,1);
-       }
-       if ((((ASCII[message[0]-0x20][1])>>7) & 0b00000001)==0b00000001){
-           display_pixel_set(41,50,1);
-       }
-   //display_pixel_set(15,i,1);
-   //}
-   //for (i=35; i<36; ++i){
-   //display_pixel_set(16,i,1);
-   //}
-   //for (i=35; i<36; ++i){
-   //display_pixel_set(17,i,1);
-   //}
-   //for (i=35; i<36; ++i){
-   //display_pixel_set(18,i,1);
-   //}
-   //for (i=31; i<39; ++i){
-   //display_pixel_set(19,i,1);
-   //}
+
 
    display_draw();
    //display_pixel_set(16,30,)
-   return 0;
-//    while (1) {
+   while (1){
+       
+   };
 
-//        _CP0_SET_COUNT(0); // set core timer to 0, remember it counts at half the CPU clock
-//            LATBINV = 0b10000000; // invert a pin
-            // wait for half a second, setting LED brightness to pot angle while waiting
-//        while (_CP0_GET_COUNT() < 10000000) {
-//            val = readADC();
-//            OC1RS = val * 40000/1023;
-//            if (PORTBbits.RB13 == 1) {
-            // nothing
-//            } else {
-//            LATBINV = 0b10000000;
-//        }
-//        }
-        // invert pin every 0.5s, set PWM duty cycle % to the pot voltage output %
-//
-//    }
 }
-
-/*int readADC(void) {
-    int elapsed = 0;
-    int finishtime = 0;
-    int sampletime = 20;
-    int a = 0;
-
-    AD1CON1bits.SAMP = 1;
-    elapsed = _CP0_GET_COUNT();
-    finishtime = elapsed + sampletime;
-    while (_CP0_GET_COUNT() < finishtime) {
-    }
-    AD1CON1bits.SAMP = 0;
-    while (!AD1CON1bits.DONE) {
-    }
-    a = ADC1BUF0;
-    return a;
-} */
 
