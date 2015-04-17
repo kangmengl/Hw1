@@ -210,10 +210,11 @@ int main() {
   
 
  
-     
+     TRISBbits.TRISB7 = 0;
+     LATBbits.LATB7 = 1;
     display_init();
        
-
+    
 
      int colstart=28;
      int rowstart=32;
@@ -231,9 +232,8 @@ int main() {
    //    if ((message[i])==0){
    //        coltracker=colstart;
    //        rowtracker=rowtracker+9;
-   //        TRISBbits.TRISB7 = 0;
-   //  LATBbits.LATB7 = 1;
-       }
+   //        
+       
        if ((ASCII[message[i]-0x20][j] & 0b00000001)==0b00000001){
            display_pixel_set(coltracker,rowtracker+7,1);
        }
@@ -261,7 +261,7 @@ int main() {
        coltracker=coltracker+1;
       // }
    }
-   
+   }
 
 
 
