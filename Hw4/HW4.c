@@ -212,22 +212,36 @@ int main() {
  
      TRISBbits.TRISB7 = 0;
      LATBbits.LATB7 = 1;
+     
     display_init();
        
     
 
-     int colstart=28;
-     int rowstart=32;
+     int colstart=32;
+     int rowstart=28;
      int coltracker=colstart;
      int rowtracker=rowstart;
-     char message[10];
+     char message[20];
      sprintf(message,"Hello World 1337!");
      int length=strlen(message);
    int i;
    int j;
    int k=0;
-   for (i=0; i<11; ++i){
+   for (i=0; i<17; ++i){
+       
    for (j=0; j<5; j++){
+   //    if (i==5){
+   //        display_draw();
+   //        rowtracker=40;
+   //        coltracker=28;
+
+   //    }
+   //    if (i==11){
+   //        display_draw();
+   //        rowtracker=50;
+   //        coltracker=28;
+
+   //    }
    //for (i=coltracker; i<coltracker+5; ++i){
    //    if ((message[i])==0){
    //        coltracker=colstart;
@@ -235,37 +249,79 @@ int main() {
    //        
        
        if ((ASCII[message[i]-0x20][j] & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker+7,1);
+           display_pixel_set(rowtracker-7,coltracker,1);
        }
        if ((((ASCII[message[i]-0x20][j])>>1) & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker+6,1);
+           display_pixel_set(rowtracker-6,coltracker,1);
        }
        if ((((ASCII[message[i]-0x20][j])>>2) & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker+5,1);
+           display_pixel_set(rowtracker-5,coltracker,1);
        }
        if ((((ASCII[message[i]-0x20][j])>>3) & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker+4,1);
+           display_pixel_set(rowtracker-4,coltracker,1);
        }
        if ((((ASCII[message[i]-0x20][j])>>4) & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker+3,1);
+           display_pixel_set(rowtracker-3,coltracker,1);
        }
        if ((((ASCII[message[i]-0x20][j])>>5) & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker+2,1);
+           display_pixel_set(rowtracker-2,coltracker,1);
        }
        if ((((ASCII[message[i]-0x20][j])>>6) & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker+1,1);
+           display_pixel_set(rowtracker-1,coltracker,1);
        }
        if ((((ASCII[message[i]-0x20][j])>>7) & 0b00000001)==0b00000001){
-           display_pixel_set(coltracker,rowtracker,1);
+           display_pixel_set(rowtracker,coltracker,1);
        }
        coltracker=coltracker+1;
       // }
    }
    }
-
-
-
    display_draw();
+   /*
+   coltracker=28;
+   rowtracker=40;
+   for (i=6; i<11; ++i){
+
+   for (j=0; j<5; j++){
+   //for (i=coltracker; i<coltracker+5; ++i){
+   //    if ((message[i])==0){
+   //        coltracker=colstart;
+   //        rowtracker=rowtracker+9;
+   //
+
+       if ((ASCII[message[i]-0x20][j] & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker-7,1);
+       }
+       if ((((ASCII[message[i]-0x20][j])>>1) & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker-6,1);
+       }
+       if ((((ASCII[message[i]-0x20][j])>>2) & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker-5,1);
+       }
+       if ((((ASCII[message[i]-0x20][j])>>3) & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker-4,1);
+       }
+       if ((((ASCII[message[i]-0x20][j])>>4) & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker-3,1);
+       }
+       if ((((ASCII[message[i]-0x20][j])>>5) & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker-2,1);
+       }
+       if ((((ASCII[message[i]-0x20][j])>>6) & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker-1,1);
+       }
+       if ((((ASCII[message[i]-0x20][j])>>7) & 0b00000001)==0b00000001){
+           display_pixel_set(coltracker,rowtracker,1);
+       }
+       coltracker=coltracker-1;
+      // }
+   }
+   }
+*/
+   TRISBbits.TRISB7 = 0;
+   LATBbits.LATB7 = 1;
+
+   //display_draw();
    //display_pixel_set(16,30,)
    while (1){
        
