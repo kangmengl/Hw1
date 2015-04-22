@@ -225,42 +225,67 @@ int main() {
    LATBbits.LATB7 = 1;
    display_clear();
 
+   
    // call accel_setup
-   char buffer[200];
+   char buffer[100];
    acc_setup();
    //acc_write_register();
    short accels[3];
    short mags[3];
    short temp;
    while (1){
+       display_clear();
+       // read accelerometer from all three axes
+       acc_read_register(OUT_X_L_A, (unsigned char *)accels, 6);
+
+       //write to OLED
+       sprintf(buffer, "x: %d y: %d z: %d \r\n",accels[0],accels[1],accels[2]);
+       OLED_write(5,1,buffer);
+
+       // accelerometer reads DC
+       acc_read_register(OUT_X_L_M, (unsigned char *)mags, 6);
+       sprintf(buffer, "xmag: %d ymag: %d zmag: %d \r\n",mags[0],mags[1],mags[2]);
+       OLED_write(25,1,buffer);
+
+       acc_read_register(TEMP_OUT_L, (unsigned char *)&temp, 2);
+       sprintf(buffer, "temp: %d \r\n", temp);
+       OLED_write(45,1,buffer);
+
+       _CP0_SET_COUNT(0);
+       while(_CP0_GET_COUNT()<20000000) {
+           ;
+       }
+   };
+   
+   
+    /*
+    // code for converting accelerometer reading to display on OLED
+    
+     char buffer[100];
+     acc_setup();
+   //acc_write_register();
+   short accels[3];
+   //short mags[3];
+   //short temp;
+   while (1){
        // read accelerometer from all three axes
        acc_read_register(OUT_X_L_A, (unsigned char *) accels, 6);
 
        //write to OLED
        sprintf(buffer, "x: %d y: %d z: %d \r\n", accels[0], accels[1], accels[2]);
-       OLED_write(5,15,buffer);
-
-       // accelerometer reads DC
-       acc_read_register(OUT_X_L_A, (unsigned char *) mags, 6);
-       sprintf(buffer, "xmag: %d ymag: %d zmag: %d \r\n", mags[0], mags[1], mags[2]);
        OLED_write(10,15,buffer);
 
-       acc_read_register(TEMP_OUT_L, (unsigned char *) &temp, 2);
-       sprintf(buffer, "temp: %d \r\n", temp);
-       OLED_write(15,15,buffer);
+       // accelerometer reads DC
 
-       _CP0_SET_COUNT(0);
-       while(_CP0_GET_COUNT()<40000000) {
-           ;
-       }
-   };
 
-   
-    
-    // code for converting accelerometer reading to display on OLED
-    while(1) {
-        ;
-    }
+
+
+      // _CP0_SET_COUNT(0);
+      // while(_CP0_GET_COUNT()<100000) {
+      //     ;
+      // }
+   }
+    */
 
    /*
    coltracker=28;
@@ -312,7 +337,7 @@ int main() {
 }
 
 void OLED_write(int rowstart, int colstart, char* message) {
-
+    //display_clear();
     // int colstart=32;
     // int rowstart=28;
      int coltracker=colstart;
