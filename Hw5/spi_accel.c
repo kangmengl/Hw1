@@ -1,13 +1,13 @@
 #include "accel.h"
 #include <xc.h>
 // interface with the LSM303D accelerometer/magnetometer using spi
-// Wire GND to GND, VDD to 3.3V,
-// SDO1 (RA4) Pin           -> SDI (labeled SDA),
-// SDI1 (RA1) Pin           -> SDO
-// SCK1 (RB14) Pin25       -> SCL
-//         RB2  (pin14) -> CS
+// Wire GND to GND, VDD to 3.3V, 
+// SDO1             -> SDI (labeled SDA),
+// SDI1             -> SDO
+// SCK1 (B14)       -> SCL
+// some digital pin -> CS
 
-#define CS LATBbits.LATB2 // replace x with some digital pin
+#define CS LATBbits.LATB4 // replace x with some digital pin
 
 // send a byte via spi and return the response
 unsigned char spi_io(unsigned char o) {
@@ -24,6 +24,9 @@ unsigned char spi_io(unsigned char o) {
 void acc_read_register(unsigned char reg, unsigned char data[], unsigned int len) {
   unsigned int i;
   reg |= 0x80; // set the read bit (as per the accelerometer's protocol)
+  if(len > 1) {
+    reg |= 0x40; // set the address auto increment bit (as per the accelerometer's protocol)
+  }
   CS = 0;
   spi_io(reg);
   for(i = 0; i != len; ++i) {
@@ -42,29 +45,20 @@ void acc_write_register(unsigned char reg, unsigned char data) {
 
 
 void acc_setup() {
-  TRISBbits.TRISB2 = 0; // set CS to output and digital if necessary
-  ANSELBbits.ANSB2 = 0;
-
+  TRISBbits.TRISB4 = 0; // set CS to output and digital if necessary
   CS = 1;
 
-  ANSELBbits.ANSB14 = 0; //set b14 analog to off
-  
   // select a pin for SDI1
-  TRISBbits.TRISB5 = 0;
-  //ANSELBbits.ANSB5 = 0;
-   //LATBbits.LATB7 = 1;
-  SDI1Rbits.SDI1R = 0b0001;
+  ANSELAbits.ANSA1 = 0;
+  SDI1Rbits.SDI1R = 0b0000;
 
   // select a pin for SD01
-  TRISAbits.TRISA4 = 0;
-  //ANSELAbits.ANSA4 = 0;
-   //LATBbits.LATB2 = 1;
   RPA4Rbits.RPA4R = 0b0011;
 
   // Setup the master Master - SPI1
-  // we manually control SS as a digital output
+  // we manually control SS as a digital output 
   // since the pic is just starting, we know that spi is off. We rely on defaults here
-
+ 
   // setup spi1
   SPI1CON = 0;              // turn off the spi module and reset it
   SPI1BUF;                  // clear the rx buffer by reading from it
@@ -74,18 +68,16 @@ void acc_setup() {
                             //    (high to low since CKP is 0)
   SPI1CONbits.MSTEN = 1;    // master operation
   SPI1CONbits.ON = 1;       // turn on spi
-
+ 
   // set the accelerometer data rate to 1600 Hz. Do not update until we read values
-  acc_write_register(CTRL1, 0xAF);
+  acc_write_register(CTRL1, 0xAF); 
 
   // 50 Hz magnetometer, high resolution, temperature sensor on
-  acc_write_register(CTRL5, 0xF0);
+  acc_write_register(CTRL5, 0xF0); 
 
   // enable continuous reading of the magnetometer
   acc_write_register(CTRL7, 0x0);
-
-  // set acceleration to 2g
-  acc_write_register(CTRL2, 0b00000000);
-
+  
+  acc_write_register(CTRL2, 0x0);
 }
 
