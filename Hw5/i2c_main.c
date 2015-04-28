@@ -300,7 +300,7 @@ int main() {
 
        }
        if (xaccel<0){
-           ratiox=30*xaccel/16000; //multiply by 50 to make line longer, make ratio more visible
+           ratiox=-30*xaccel/16000; //multiply by 50 to make line longer, make ratio more visible
                for (i=0; i<ratiox; i++){
                display_pixel_set(rowstart,colstart-i,1);
 
@@ -317,7 +317,7 @@ int main() {
            //display_draw();
        }
        if (yaccel<0){
-           ratioy=30*yaccel/16000;
+           ratioy=-30*yaccel/16000;
            for (i=0; i<ratioy; i++) {
                display_pixel_set(rowstart-i,colstart,1);
 
