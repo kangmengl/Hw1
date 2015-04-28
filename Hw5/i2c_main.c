@@ -226,7 +226,8 @@ int main() {
    LATBbits.LATB7 = 1;
    //display_clear();
 
-   
+   /*
+   // code for displaying acceleration, magnetic field, temperature
    // call accel_setup
    acc_setup();
    //acc_write_register();
@@ -243,7 +244,7 @@ int main() {
 
        //write to OLED
        sprintf(buffer, "x: %d y: %d z: %d ",accels[0],accels[1],accels[2]);
-       OLED_write(5,1,buffer);
+       OLED_write(10,1,buffer);
 
        // accelerometer reads DC
        //acc_read_register(OUT_X_L_M, (unsigned char *) mags, 6);
@@ -259,7 +260,74 @@ int main() {
            ;
        }
    };
-   
+
+   */
+
+   //Code for setting up lines corresponding to acceleration
+   // call accel_setup
+   acc_setup();
+   //acc_write_register();
+
+   int rowstart=31;
+   int colstart=64;
+
+   while (1){
+         // char buffer[100];
+
+         short accels[3];
+         short xaccel;
+         short yaccel;
+         short zaccel;
+         int i;
+         int ratiox;
+         int ratioy;
+         //short mags[3];
+         //short temp;
+       display_clear();
+       // read accelerometer from all three axes
+       acc_read_register(OUT_X_L_A, (unsigned char *) accels, 6);
+       xaccel=accels[0];
+       yaccel=accels[1];
+       zaccel=accels[2];
+       if (xaccel>=0){
+           ratiox=50*xaccel/8000; //multiply by 50 to make line longer, make ratio more visible
+               for (i=0; i<ratiox; i++){
+               display_pixel_set(rowstart+i,colstart,1);
+               
+               }
+           display_draw();
+
+       }
+       if (xaccel<0){
+           ratiox=50*xaccel/8000; //multiply by 50 to make line longer, make ratio more visible
+               for (i=0; i<ratiox; i++){
+               display_pixel_set(rowstart-i,colstart,1);
+
+               }
+           display_draw();
+
+       }
+       if (yaccel>=0){
+           ratioy=50*yaccel/8000;
+           for (i=0; i<ratioy; i++) {
+               display_pixel_set(rowstart,colstart+i,1);
+               
+           }
+           display_draw();
+       }
+       if (yaccel<0){
+           ratioy=50*yaccel/8000;
+           for (i=0; i<ratioy; i++) {
+               display_pixel_set(rowstart,colstart-i,1);
+
+           }
+           display_draw();
+       }
+       //write to OLED
+       //sprintf(buffer, "x: %d y: %d z: %d ",accels[0],accels[1],accels[2]);
+       //OLED_write(10,1,buffer);
+
+   };
    
     /*
     // code for converting accelerometer reading to display on OLED
