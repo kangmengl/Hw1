@@ -450,6 +450,7 @@ void APP_Tasks ( void )
 
     char buffer[100];
     short accels[3];
+
     display_clear();
        // read accelerometer from all three axes
        acc_read_register(OUT_X_L_A, (unsigned char *) accels, 6);
@@ -463,11 +464,100 @@ void APP_Tasks ( void )
     //int8_t dir_table[] ={-4,-4,-4, 0, 4, 4, 4, 0};   //edit for hw7
     //int8_t dir_table[] = {accels[0]};           //make two tables?
     //int8_t dir_tabley[] = {accels[1]};
-       int directionx = (accels[0]/1000);
+       int i;
+       int j;
+       int directionx = (accels[0]);
+       int directiony = (accels[1]);
+       //direction checks for x
+       if ((directionx > 1000) & (directionx <=2000)) {
+            i = 1;
+       }
+       if ((directionx > 2000) & (directionx <=3000)) {
+            i = 2;
+       }
+       if ((directionx > 3000) & (directionx <=4000)) {
+            i = 3;
+       }
+       if ((directionx > 4000) & (directionx <=5000)) {
+            i = 4;
+       }
+       if ((directionx > 5000) & (directionx <=6000)) {
+            i = 5;
+       }
+       if ((directionx > 6000)) {
+            i = 6;
+       }
+
+       //
+       if ((directionx < -1000) & (directionx >= -2000)) {
+            i = -1;
+       }
+       if ((directionx < -2000) & (directionx >= -3000)) {
+            i = -2;
+       }
+       if ((directionx < -3000) & (directionx >= -4000)) {
+            i = -3;
+       }
+       if ((directionx < -4000) & (directionx >= -5000)) {
+            i = -4;
+       }
+       if ((directionx < -5000) & (directionx >= -6000)) {
+            i = -5;
+       }
+       if ((directionx < -6000)) {
+            i = -6;
+       }
+       // direction checks for y
+       if ((directiony > 1000) & (directiony <=2000)) {
+            j = 1;
+       }
+       if ((directiony > 2000) & (directiony <=3000)) {
+            j = 2;
+       }
+       if ((directiony > 3000) & (directiony <=4000)) {
+            j = 3;
+       }
+       if ((directiony > 4000) & (directiony <=5000)) {
+            j = 4;
+       }
+       if ((directiony > 5000) & (directiony <=6000)) {
+            j = 5;
+       }
+       if ((directiony > 6000)) {
+            j = 6;
+       }
+
+       //
+       if ((directiony < -1000) & (directiony >= -2000)) {
+            j = -1;
+       }
+       if ((directiony < -2000) & (directiony >= -3000)) {
+            j = -2;
+       }
+       if ((directiony < -3000) & (directiony >= -4000)) {
+            j = -3;
+       }
+       if ((directiony < -4000) & (directiony >= -5000)) {
+            j = -4;
+       }
+       if ((directiony < -5000) & (directiony >= -6000)) {
+            j = -5;
+       }
+       if ((directiony < -6000)) {
+            j = -6;
+       }
+
+       /*       //this is the code to make it work at the same speed in a direction
+     int directionx = (accels[0]/1000);
        int directiony = (accels[1]/1000);
        int8_t dirx[]={directionx};
        int8_t diry[]={directiony};
-	
+       */
+       //putting it into the class?
+       int8_t dirx[]={i, i, i ,i, i, i, i, i};
+       int8_t diry[]={j, j, j, j, j, j, j, j};
+
+
     /* Check the application's current state. */
     switch ( appData.state )
     {
