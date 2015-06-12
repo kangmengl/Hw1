@@ -298,7 +298,7 @@ public class SerialConsoleActivity extends Activity implements TextureView.Surfa
             }
 
             int i = COM; //int j = 2; // the two numbers to send
-            String sendString = String.valueOf(i); //+ " " + String.valueOf(j);
+            String sendString =  String.valueOf(i) + "a"; //+ " " + String.valueOf(j);
             try {
                 sPort.write(sendString.getBytes(),10); // 10 is the timeout (error)
             }

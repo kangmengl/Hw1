@@ -377,8 +377,11 @@ void APP_Initialize ( void )
       TRISBbits.TRISB5 = 0;       //set pin b5 as digital output
      LATBbits.LATB5 = 1;
 
-     //TRISBbits.TRISB15 = 0;       //set pin b15 as digital output
-     //LATBbits.LATB15 = 0;
+     TRISBbits.TRISB15 = 0;       //set pin b15 as digital output
+     LATBbits.LATB15 = 0;
+
+     TRISBbits.TRISB3= 0;       //set pin b3 as output
+     LATBbits.LATB3 = 0;
 
      //setup OC1 on pin b7
       RPB7Rbits.RPB7R = 0b0101;
@@ -433,11 +436,11 @@ void APP_Tasks ( void )
     USB_DEVICE_CDC_RESULT writeRequestResult;
 
     //set pwm cycles
-    OC1RS=num1*66;
-    OC2RS=20000;
+    //OC1RS=num1*100;
+    //OC2RS=20000;
 
-    //OC1RS=30000;
-    //OC2RS=num1*66;
+    OC1RS=30000;
+    OC2RS=num1*100;
    
     /* Update the application state machine based
      * on the current state */
@@ -501,12 +504,12 @@ void APP_Tasks ( void )
                         appData.readBuffer, 64);
 
                 buffer[0]=appData.readBuffer[0];
-                if (buffer[0] == 'a') {
-                    if (LATBbits.LATB5 == 0) {          //toggle b5
-                        LATBbits.LATB5 =1;
+                if (buffer[1] == 'a') {
+                    if (LATBbits.LATB15 == 0) {          //toggle b5
+                        LATBbits.LATB15 =1;
                     }
                     else {
-                         LATBbits.LATB5 =0;
+                         LATBbits.LATB15 =0;
                     }
                 }
                 //DRV_USART_Write(appData.usartHandle, appData.readBuffer, appData.readLength);
@@ -536,13 +539,18 @@ void APP_Tasks ( void )
             
             //phone CDC
             int i = 0;
-            char rxbuffer[100];
-            int num1; int num2;
+            //char rxbuffer[100];
+            //int num1; int num2;
             for(i=0;i<64;i++) {
             rxbuffer[i] = appData.readBuffer[i];
             }
              sscanf(rxbuffer,"%d %d",&num1,&num2);  //this is where the buffer is read in, num1 stores the COM
-             
+             if (LATBbits.LATB15 == 0) {          //toggle b15
+                        LATBbits.LATB5 = 1;
+            }
+                    if (LATBbits.LATB5 == 1) {          //toggle b15
+                        LATBbits.LATB5 = 0;
+            }
 
             appData.state = APP_STATE_CHECK_UART_RECEIVE;
             break;
@@ -550,12 +558,13 @@ void APP_Tasks ( void )
         case APP_STATE_CHECK_UART_RECEIVE:
 
 
-            if (LATBbits.LATB15 == 0) {          //toggle b15
+            /*if (LATBbits.LATB15 == 0) {          //toggle b15
                         LATBbits.LATB15 = 1;
             }
                     else {
                          LATBbits.LATB15 = 0;
                     }
+             */
             if(APP_StateReset())
             {
                 break;
@@ -579,11 +588,11 @@ void APP_Tasks ( void )
             writeRequestResult = USB_DEVICE_CDC_Write(0, &appData.writeTransferHandle, message, len, USB_DEVICE_CDC_TRANSFER_FLAGS_DATA_COMPLETE);
             if(USB_DEVICE_CDC_RESULT_OK != writeRequestResult) {
             // turn on another led if there is an error
-                //LATBbits.LATB7 = 1;
+                //LATBbits.LATB15 = 1;
             }
              else {
             // turn off the led if there is not an error
-                //LATBbits.LATB7 = 0;
+                //LATBbits.LATB15 = 0;
              }
            
 
